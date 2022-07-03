@@ -1,2 +1,1 @@
-# StudentInformationSystem
-StudentInformationSystem
+After reading the students and courses in the file, they save these data in a specific order to the student and course linked list. After this process, the teacher can add new courses and students,student can choose course. While the student chooses these courses according to specific conditions, these selected courses are also saved to the students and their lessons file.
