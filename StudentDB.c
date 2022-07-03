@@ -50,8 +50,8 @@ STUDENTCOURSESINFO *NewStudentCourses(STUDENTCOURSESINFO *head,char courseCode[]
 void UpdateStudentCourseInfo(STUDENTCOURSESINFO **headStdCrs,long studentNumber,char courseCode[]);
 int SearchCourseStudent(STUDENTCOURSESINFO *headStdCrs,char courseCode[],long studentNumber);
 STUDENTCOURSESINFO *Search(STUDENTCOURSESINFO *headStdCrs,char courseCode[],long studentNumber);
-
-
+void ListCoursesOfStudent(STUDENTCOURSESINFO *head);
+void ListStudentsOfCourse(STUDENTCOURSESINFO *head);
 
 
 int main(int argc, char *argv[]) {
@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
     	scanf("%d",&maxCredit);
     }
 
-	
 	while(loop){
 	    printf("for teacher press 1, for student press 2, for exit press 3:\n");
 	    scanf("%d",&choice);
@@ -83,10 +82,12 @@ int main(int argc, char *argv[]) {
 			else if(choice2==4) DeleteStudent(&headStd);
 	    }
     	else if(choice==2){
-			printf("for add course press 1 for delete course press 2:\n");
+			printf("for add course press 1, for delete course press 2, for list courses of student press 3, for list students of course press 4 :\n");
 			scanf("%d",&choice3);
 			if(choice3==1) headStdCrs=ChooseCourse(headStd,headCrs,headStdCrs,maxCourse,maxCredit);
-			if(choice3==2) headStdCrs=RemoveCourse(headStd,headCrs,headStdCrs);
+			else if(choice3==2) headStdCrs=RemoveCourse(headStd,headCrs,headStdCrs);
+			else if(choice3==3) ListCoursesOfStudent(headStdCrs);
+			else if(choice3==4) ListStudentsOfCourse(headStdCrs);
     	}
     	else if(choice==3) loop=0;
     	else{
@@ -182,7 +183,6 @@ void AddingProcessCrs(COURSEINFO **headCrs,char courseCode[],char courseName[],i
 		}
 		fclose(data);
 	}	
-	printf("succesfull!!\n");
 
 }
 COURSEINFO *NewCourse(char courseCode[],char courseName[],int credit,int quota)
@@ -323,7 +323,7 @@ void AddingProcessStd(STUDENT **headStd, long number,char name[],char surname[],
 		}
 	}
 	UpdateStudentsFile(*headStd);
-	printf("succesfull!!\n");
+
 
 }
 
@@ -593,7 +593,7 @@ void UpdateStudentCourseInfo(STUDENTCOURSESINFO **headStdCrs,long studentNumber,
 		}
 		fclose(data);
 	}
-	printf("succesfull!!\n");	
+		
 }
 
 STUDENTCOURSESINFO *NewStudentCourses(STUDENTCOURSESINFO *head,char courseCode[],long studentNumber)
@@ -604,4 +604,46 @@ STUDENTCOURSESINFO *NewStudentCourses(STUDENTCOURSESINFO *head,char courseCode[]
     tmp->studentNumber=studentNumber;
     tmp->next=NULL;
 	return tmp;	
+}
+
+void ListCoursesOfStudent(STUDENTCOURSESINFO *head)
+{
+	int count=0;
+	STUDENTCOURSESINFO *tmp;
+	tmp=head;
+	long studentNumber;
+	printf("Enter the student number whose courses you want to see:\n");
+	scanf("%ld",&studentNumber);
+	if(tmp==NULL) printf("First of all, the student must choose a course.\n");
+	else{
+    	while(tmp!=NULL){
+    		if(studentNumber==tmp->studentNumber){
+    			count++;
+    			printf("course of student: %s\n",tmp->courseCode);
+			}
+    	    tmp = tmp->next;
+	    }
+	    if(count==0) printf("First of all, the student must choose a course.\n");
+    }
+}
+
+void ListStudentsOfCourse(STUDENTCOURSESINFO *head)
+{
+	int count=0;
+	STUDENTCOURSESINFO *tmp;
+	tmp=head;
+	char courseCode[20];
+	printf("Enter the course code whose students you want to see:\n");
+	scanf("%s",courseCode);
+	if(tmp==NULL) printf("First of all, the student must choose a course.\n");
+	else{
+    	while(tmp!=NULL){
+    		if(strcmp(courseCode,tmp->courseCode)==0){
+    			count++;
+    			printf("student of course: %ld\n",tmp->studentNumber);
+			}
+    	    tmp = tmp->next;
+	    }
+	    if(count==0) printf("First of all, the student must choose a course.\n");
+    }
 }
